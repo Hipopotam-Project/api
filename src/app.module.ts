@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { AppController } from './app.controller';
 import { randomUUID } from 'node:crypto';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { FarmersModule } from './modules/farmers/farmers.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -12,6 +17,25 @@ const isProd = process.env.NODE_ENV === 'production';
       isGlobal: true,
       cache: true,
       expandVariables: true,
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        { ttl: seconds(60), limit: 20 }, // 20 req / 60s
+      ],
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (cfg: ConfigService) => {
+        const ssl = cfg.get('DATABASE_SSL') === 'true';
+        return {
+          type: 'postgres',
+          url: cfg.get<string>('DATABASE_URL'), // ← the whole URL string
+          autoLoadEntities: true, // удобно в monolith; изключи в по-строги среди
+          synchronize: cfg.get('NODE_ENV') !== 'production', // В ПРОД – ВИНАГИ false
+          logging: ['error', 'warn'], // не шумни логове
+          ssl: ssl ? { rejectUnauthorized: true } : false,
+        };
+      },
     }),
     LoggerModule.forRoot({
       pinoHttp: {
@@ -84,7 +108,10 @@ const isProd = process.env.NODE_ENV === 'production';
           : undefined,
       },
     }),
+    FarmersModule,
+    AuthModule,
   ],
   controllers: [AppController],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

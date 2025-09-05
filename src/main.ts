@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { Logger } from 'nestjs-pino';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   // Buffer logs until the pino logger is ready
@@ -20,6 +21,8 @@ async function bootstrap() {
     credentials: false,
     maxAge: 86400,
   });
+
+  app.use(cookieParser());
 
   // Security headers
   app.use(helmet());
