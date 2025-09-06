@@ -12,4 +12,7 @@ export class InitializeSensorDTO {
 
   @IsString()
   lng: string;
+
+  @IsString()
+  master_key: string;
 }

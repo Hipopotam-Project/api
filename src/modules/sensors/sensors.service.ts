@@ -13,6 +13,10 @@ export class SensorsService {
     private readonly firesService: FiresService,
   ) {}
 
+  isMasterKeyCorrect(key: string) {
+    return key === process.env.MASTER_KEY;
+  }
+
   async initializeSensor(initializeDto: InitializeSensorDTO) {
     const doesExist = await this.sensorRepository.exists({
       where: { id: initializeDto.sensor_id },
