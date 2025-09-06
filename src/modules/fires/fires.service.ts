@@ -8,6 +8,15 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class FiresService {
+  registerFire(createFireDto: CreateFireDto) {
+    const fire = this.firesRepository.create({
+      lat: createFireDto.lat,
+      lng: createFireDto.lng,
+      farmer_id: createFireDto.farmer_id,
+      expiresAt: new Date(new Date().getTime() + 24 * 60 * 60000), // 24 hours from now
+    });
+    return this.firesRepository.save(fire);
+  }
   constructor(
     @InjectRepository(Fire) private firesRepository: Repository<Fire>,
   ) {}

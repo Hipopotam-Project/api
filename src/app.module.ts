@@ -23,7 +23,7 @@ const isProd = process.env.NODE_ENV === 'production';
     }),
     ThrottlerModule.forRoot({
       throttlers: [
-        { ttl: seconds(60), limit: 20 }, // 20 req / 60s
+        { ttl: seconds(60), limit: 50 }, // 50 req / 60s
       ],
     }),
     TypeOrmModule.forRootAsync({

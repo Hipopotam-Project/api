@@ -24,6 +24,9 @@ export class Fire {
   @Column({ type: 'text', nullable: true, default: null })
   sensor_id?: string;
 
+  @Column({ type: 'text', nullable: true, default: null })
+  farmer_id?: string;
+
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 

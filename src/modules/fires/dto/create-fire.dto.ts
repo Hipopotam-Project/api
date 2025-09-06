@@ -6,4 +6,7 @@ export class CreateFireDto {
 
   @IsString()
   lng: string;
+
+  @IsString()
+  farmer_id: string;
 }
