@@ -31,7 +31,7 @@ export class Farmer {
   @Column({ type: 'boolean', default: false })
   is_admin: boolean;
 
-  @ManyToOne(() => Farm, (farm) => farm.farmers, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Farm, { onDelete: 'CASCADE' })
   farm: Farm;
 
   @Column({ type: 'text', nullable: true })
