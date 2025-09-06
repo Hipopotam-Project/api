@@ -42,6 +42,7 @@ export class AuthController {
       dto.password,
       dto.phone,
       dto.name,
+      dto.farm_join_code,
     );
     setRefreshCookie(res, tokens.refreshToken);
     return { user, accessToken: tokens.accessToken };

@@ -20,4 +20,7 @@ export class CreateUserDto {
 
   @IsString()
   name: string;
+
+  @IsString()
+  farm_join_code: string;
 }

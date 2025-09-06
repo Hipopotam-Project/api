@@ -15,6 +15,7 @@ export class FarmersService {
     passwordHash: string,
     phone: string,
     name: string,
+    farmId: string,
   ): Promise<Farmer> {
     const exists = await this.repo.findOne({
       where: { email: email.toLowerCase() },
@@ -25,9 +26,14 @@ export class FarmersService {
       passwordHash,
       phone,
       name,
+      farm: { id: farmId } as any,
     });
     return this.repo.save(farmer);
   }
+
+  // async setFarm(farmerId: string, farmId: string, isAdmin: boolean) {
+  //   await this.repo.update({ id: farmerId }, { farm_id: farmId, is_admin: isAdmin });
+  // }
 
   findByEmail(email: string): Promise<Farmer | null> {
     return this.repo.findOne({ where: { email: email.toLowerCase() } });

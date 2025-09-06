@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
+import { Farmer } from '../farmers/farmers.entity';
 
 @Entity('farm')
 export class Farm {
@@ -41,4 +43,7 @@ export class Farm {
 
   @Column({ type: 'int', default: 0 })
   workers: number;
+
+  // @OneToMany(() => Farmer, (farmer) => farmer.farm, { cascade: true })
+  // farmers: Farmer[];
 }

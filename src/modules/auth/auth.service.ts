@@ -7,12 +7,14 @@ import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { Tokens } from './types/tokens.types';
 import { FarmersService } from '../farmers/farmers.service';
+import { FarmService } from '../farm/farm.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly users: FarmersService,
     private readonly jwt: JwtService,
+    private readonly farmService: FarmService,
   ) {}
 
   private async signTokens(userId: string, email: string): Promise<Tokens> {
@@ -35,9 +37,27 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async register(email: string, password: string, phone: string, name: string) {
+  async handleFarmerRelation(uId: string, joinCode: string) {
+    const joinFarm = await this.farmService.getJoinFarmByCode(Number(joinCode));
+    if (!joinFarm) {
+      throw new ForbiddenException('Invalid farm join code');
+    }
+    // await this.users.setFarm(uId, joinFarm.farm_id, joinFarm.isAdmin);
+    await this.farmService.deleteJoinFarmByKey(joinFarm.key);
+    return joinFarm.farm_id;
+  }
+
+  async register(
+    email: string,
+    password: string,
+    phone: string,
+    name: string,
+    joinCode: string,
+  ) {
     const hash = await argon2.hash(password);
-    const user = await this.users.create(email, hash, phone, name);
+    const farmId = await this.handleFarmerRelation(email, joinCode);
+    console.log('farmId', farmId);
+    const user = await this.users.create(email, hash, phone, name, farmId);
     const tokens = await this.signTokens(user.id, user.email);
     const rtHash = await argon2.hash(tokens.refreshToken);
     await this.users.setRefreshTokenHash(user.id, rtHash);
@@ -47,6 +67,7 @@ export class AuthService {
         email: user.email,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        joinCode,
       },
       tokens,
     };

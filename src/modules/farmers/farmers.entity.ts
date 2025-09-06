@@ -6,7 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToOne,
 } from 'typeorm';
+import { Farm } from '../farm/farm.entity';
 
 @Entity('farmers')
 export class Farmer {
@@ -25,6 +27,12 @@ export class Farmer {
 
   @Column({ type: 'text' })
   name: string;
+
+  @Column({ type: 'boolean', default: false })
+  is_admin: boolean;
+
+  @ManyToOne(() => Farm, (farm) => farm.farmers, { onDelete: 'CASCADE' })
+  farm: Farm;
 
   @Column({ type: 'text', nullable: true })
   refreshTokenHash: string | null;

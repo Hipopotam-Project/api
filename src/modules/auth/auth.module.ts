@@ -5,10 +5,12 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { AccessJwtStrategy } from './strategies/access-jwt.strategy';
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
+import { FarmModule } from '../farm/farm.module';
 
 @Module({
   imports: [
     FarmersModule,
+    FarmModule,
     JwtModule.register({}), // secrets provided ad-hoc in service
   ],
   providers: [AuthService, AccessJwtStrategy, RefreshJwtStrategy],

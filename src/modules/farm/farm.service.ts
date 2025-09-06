@@ -31,8 +31,16 @@ export class FarmService {
       isAdmin: true,
     });
     codes.push(adminCode);
-    console.log(codes);
+    // console.log(codes);
     await this.joinFarmRepo.save(codes);
+  }
+
+  async deleteJoinFarmByKey(id: number): Promise<void> {
+    await this.joinFarmRepo.delete({ key: id });
+  }
+
+  async getJoinFarmByCode(code: number): Promise<JoinFarm | null> {
+    return this.joinFarmRepo.findOne({ where: { key: code } });
   }
 
   async create(createFarmDto: CreateFarmDto): Promise<Farm> {
