@@ -8,6 +8,7 @@ import { FarmersModule } from './modules/farmers/farmers.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { FarmModule } from './modules/farm/farm.module';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -110,6 +111,7 @@ const isProd = process.env.NODE_ENV === 'production';
     }),
     FarmersModule,
     AuthModule,
+    FarmModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
