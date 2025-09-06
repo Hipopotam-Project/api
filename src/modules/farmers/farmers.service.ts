@@ -1,3 +1,4 @@
+import { PhoneLocale } from './../../../node_modules/@types/validator/index.d';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,7 +10,12 @@ export class FarmersService {
     @InjectRepository(Farmer) private readonly repo: Repository<Farmer>,
   ) {}
 
-  async create(email: string, passwordHash: string): Promise<Farmer> {
+  async create(
+    email: string,
+    passwordHash: string,
+    phone: string,
+    name: string,
+  ): Promise<Farmer> {
     const exists = await this.repo.findOne({
       where: { email: email.toLowerCase() },
     });
@@ -17,6 +23,8 @@ export class FarmersService {
     const farmer = this.repo.create({
       email: email.toLowerCase(),
       passwordHash,
+      phone,
+      name,
     });
     return this.repo.save(farmer);
   }

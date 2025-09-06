@@ -37,7 +37,12 @@ export class AuthController {
     @Body() dto: CreateUserDto,
     @Res({ passthrough: true }) res: express.Response,
   ) {
-    const { user, tokens } = await this.auth.register(dto.email, dto.password);
+    const { user, tokens } = await this.auth.register(
+      dto.email,
+      dto.password,
+      dto.phone,
+      dto.name,
+    );
     setRefreshCookie(res, tokens.refreshToken);
     return { user, accessToken: tokens.accessToken };
   }

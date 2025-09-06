@@ -35,9 +35,9 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async register(email: string, password: string) {
+  async register(email: string, password: string, phone: string, name: string) {
     const hash = await argon2.hash(password);
-    const user = await this.users.create(email, hash);
+    const user = await this.users.create(email, hash, phone, name);
     const tokens = await this.signTokens(user.id, user.email);
     const rtHash = await argon2.hash(tokens.refreshToken);
     await this.users.setRefreshTokenHash(user.id, rtHash);

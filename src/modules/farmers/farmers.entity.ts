@@ -1,3 +1,4 @@
+import { MinLength, MaxLength } from 'class-validator';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -18,6 +19,12 @@ export class Farmer {
 
   @Column({ type: 'text' })
   passwordHash: string;
+
+  @Column({ type: 'text', nullable: false })
+  phone: string;
+
+  @Column({ type: 'text' })
+  name: string;
 
   @Column({ type: 'text', nullable: true })
   refreshTokenHash: string | null;
