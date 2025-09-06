@@ -1,20 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Farm } from './farm.entity';
 import { CreateFarmDto } from './dto/create-farm.dto';
 import { UpdateFarmDto } from './dto/update-farm.dto';
+import { JoinFarm } from './join-farm.entity';
+import { Logger } from 'nestjs-pino';
 
 @Injectable()
 export class FarmService {
   constructor(
     @InjectRepository(Farm)
     private readonly farmRepository: Repository<Farm>,
+    @InjectRepository(JoinFarm)
+    private readonly joinFarmRepo: Repository<JoinFarm>,
   ) {}
 
+  private async createJoinFarmCodes(farmId: string, numberOfWorkers: number) {
+    console.log('farmID', farmId);
+    const codes: JoinFarm[] = [];
+    for (let i = 0; i < numberOfWorkers; i++) {
+      const code = this.joinFarmRepo.create({
+        farm_id: farmId,
+        isAdmin: false,
+      });
+      codes.push(code);
+    }
+    const adminCode = this.joinFarmRepo.create({
+      farm_id: farmId,
+      isAdmin: true,
+    });
+    codes.push(adminCode);
+    console.log(codes);
+    await this.joinFarmRepo.save(codes);
+  }
+
   async create(createFarmDto: CreateFarmDto): Promise<Farm> {
-    const farm = this.farmRepository.create(createFarmDto);
-    return this.farmRepository.save(farm);
+    const farm = this.farmRepository.create({ ...createFarmDto });
+    const record = await this.farmRepository.save(farm);
+    await this.createJoinFarmCodes(record.id, createFarmDto.workers);
+    return record;
   }
 
   async findAll(): Promise<Farm[]> {

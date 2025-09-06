@@ -27,4 +27,7 @@ export class CreateFarmDto {
 
   @IsInt()
   pticevudstvo: number;
+
+  @IsInt()
+  workers: number;
 }

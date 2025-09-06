@@ -38,4 +38,7 @@ export class Farm {
 
   @Column({ type: 'int', default: 0 })
   pticevudstvo: number;
+
+  @Column({ type: 'int', default: 0 })
+  workers: number;
 }
