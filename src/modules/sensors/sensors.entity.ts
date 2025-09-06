@@ -29,4 +29,7 @@ export class Sensor {
 
   @Column({ type: 'float', default: 0 })
   humidity: number;
+
+  @Column({ type: 'boolean', default: false })
+  fire_detected: boolean;
 }

@@ -21,9 +21,10 @@ export class FiresService {
     return this.firesRepository.save(fire);
   }
 
-  createFromSensor(fire: CreateFireDto, sensor_id: string) {
+  createFromSensor(lat: string, lng: string, sensor_id: string) {
     const newFire = this.firesRepository.create({
-      ...fire,
+      lat,
+      lng,
       sensor_id,
       expiresAt: new Date(new Date().getTime() + 24 * 60 * 60000), // 24 hours from now
     });

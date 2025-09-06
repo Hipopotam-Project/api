@@ -10,4 +10,22 @@ export class SensorsController {
   initializeSensor(@Body() initializeDto: InitializeSensorDTO) {
     return this.sensorsService.initializeSensor(initializeDto);
   }
+
+  @Post('data')
+  updateSensorData(
+    @Body()
+    updateDto: {
+      sensor_id: string;
+      temp: number;
+      humidity: number;
+      fireDetected: boolean;
+    },
+  ) {
+    return this.sensorsService.updateSensorData(
+      updateDto.sensor_id,
+      updateDto.temp,
+      updateDto.humidity,
+      updateDto.fireDetected,
+    );
+  }
 }
