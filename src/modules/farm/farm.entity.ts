@@ -14,7 +14,7 @@ export class Farm {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'smallint', array: true })
+  @Column({ type: 'float', array: true })
   location_field: Array<Array<number>>;
 
   @Column({ type: 'text' })
