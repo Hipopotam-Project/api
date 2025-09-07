@@ -1,8 +1,25 @@
-import { IsArray, IsEmail, IsInt, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  Allow,
+  IsArray,
+  IsEmail,
+  IsInt,
+  IsNumber,
+  IsString,
+} from 'class-validator';
+import { isFloat16Array } from 'util/types';
+
+export class CoordinateDto {
+  @IsNumber()
+  lat: number;
+
+  @IsNumber()
+  lng: number;
+}
 
 export class CreateFarmDto {
-  @IsArray()
-  location_field: Array<Array<number>>;
+  @Allow()
+  location_field: number[][];
 
   @IsString()
   name: string;
