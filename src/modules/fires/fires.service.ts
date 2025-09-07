@@ -53,6 +53,12 @@ export class FiresService {
     );
   }
 
+  async getAllActiveFires() {
+    return await this.firesRepository.find({
+      where: { expiresAt: MoreThan(new Date()) },
+    });
+  }
+
   findAll() {
     return `This action returns all fires`;
   }

@@ -19,4 +19,9 @@ export class FiresController {
   registerFire(@Body() createFireDto: CreateFireDto) {
     return this.firesService.registerFire(createFireDto);
   }
+
+  @Get()
+  findAll() {
+    return this.firesService.getAllActiveFires();
+  }
 }

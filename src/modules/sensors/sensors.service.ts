@@ -7,6 +7,9 @@ import { FiresService } from '../fires/fires.service';
 
 @Injectable()
 export class SensorsService {
+  async getAllSensors() {
+    return await this.sensorRepository.find();
+  }
   constructor(
     @InjectRepository(Sensor)
     private readonly sensorRepository: Repository<Sensor>,

@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { SensorsService } from './sensors.service';
 import { InitializeSensorDTO } from './dto/initialize-sensor.dto';
 
@@ -32,5 +38,10 @@ export class SensorsController {
       updateDto.humidity,
       updateDto.fireDetected,
     );
+  }
+
+  @Get('all')
+  async getAllSensors() {
+    return await this.sensorsService.getAllSensors();
   }
 }
