@@ -50,7 +50,7 @@ async function bootstrap() {
     logger.error({ err }, 'UNCAUGHT EXCEPTION');
   });
 
-  const port = process.env.PORT ?? 3000;
+  const port = process.env.PORT ?? 8080;
   await app.listen(port, '0.0.0.0');
   logger.log(`HTTP server listening on http://localhost:${port}`);
 }
