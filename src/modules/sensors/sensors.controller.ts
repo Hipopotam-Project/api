@@ -4,9 +4,11 @@ import {
   Get,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { SensorsService } from './sensors.service';
 import { InitializeSensorDTO } from './dto/initialize-sensor.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('sensor')
 export class SensorsController {
@@ -40,6 +42,7 @@ export class SensorsController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('all')
   async getAllSensors() {
     return await this.sensorsService.getAllSensors();

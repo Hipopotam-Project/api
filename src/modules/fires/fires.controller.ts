@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { FiresService } from './fires.service';
 import { CreateFireDto } from './dto/create-fire.dto';
 import { UpdateFireDto } from './dto/update-fire.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('fires')
 export class FiresController {
@@ -20,6 +22,7 @@ export class FiresController {
     return this.firesService.registerFire(createFireDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.firesService.getAllActiveFires();
